@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  source:
+    image: ping
+    command: bash -c 'sleep 3; set -x; ping -c 2 target; ping -c 2 target-alias; sleep 5'
+    networks:
+      default:
+        aliases:
+          - "source-alias"
+
+  target:
+    image: ping
+    depends_on:
+      - source
+    networks:
+      default:
+        aliases:
+          - "target-alias"
+    command: bash -c 'sleep 3; set -x; ping -c 2 source; ping -c 2 source-alias; sleep 5'
